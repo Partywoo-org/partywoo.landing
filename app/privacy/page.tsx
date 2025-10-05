@@ -105,7 +105,7 @@ export default function PrivacyPage() {
               <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-4 sm:p-6 rounded-xl">
                 <h3 className="font-semibold text-base sm:text-lg mb-2">📊 Miglioramento Servizio</h3>
                 <p className="text-gray-700 text-sm sm:text-base">
-                  Analizzare l'utilizzo della piattaforma per migliorarne funzionalità e prestazioni
+                  Analizzare l&apos;utilizzo della piattaforma per migliorarne funzionalità e prestazioni
                 </p>
               </div>
             </div>
@@ -121,7 +121,7 @@ export default function PrivacyPage() {
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span><strong>Consenso dell'interessato</strong> - per l'invio di comunicazioni marketing e newsletter</span>
+                <span><strong>Consenso dell&apos;interessato</strong> - per l&apos;invio di comunicazioni marketing e newsletter</span>
               </li>
               <li className="flex items-start gap-3">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -143,8 +143,8 @@ export default function PrivacyPage() {
             <p className="text-gray-700 mb-4 leading-relaxed">
               I dati personali sono trattati con strumenti elettronici e manuali, con modalità organizzative
               e logiche strettamente correlate alle finalità indicate. Vengono adottate misure di sicurezza
-              tecniche e organizzative adeguate per prevenire la perdita, l'uso illecito o non corretto e
-              l'accesso non autorizzato ai dati.
+              tecniche e organizzative adeguate per prevenire la perdita, l&apos;uso illecito o non corretto e
+              l&apos;accesso non autorizzato ai dati.
             </p>
           </section>
 
@@ -159,7 +159,7 @@ export default function PrivacyPage() {
                 <strong>Beta tester:</strong> Per tutta la durata della partecipazione al programma beta e per un massimo di 24 mesi
               </p>
               <p className="text-gray-700">
-                <strong>Newsletter:</strong> Fino alla revoca del consenso da parte dell'utente
+                <strong>Newsletter:</strong> Fino alla revoca del consenso da parte dell&apos;utente
               </p>
               <p className="text-gray-700">
                 <strong>Richieste di supporto:</strong> Per il tempo necessario a gestire la richiesta più 12 mesi
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">9. Diritti dell'Interessato</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">9. Diritti dell&apos;Interessato</h2>
             <p className="text-gray-700 mb-4 leading-relaxed">
               Ai sensi degli articoli 15-22 del GDPR, hai il diritto di:
             </p>
@@ -189,7 +189,7 @@ export default function PrivacyPage() {
                 <span className="text-primary text-xl sm:text-2xl">📋</span>
                 <div>
                   <h4 className="font-semibold text-sm sm:text-base">Accesso</h4>
-                  <p className="text-gray-600 text-xs sm:text-sm">Ottenere conferma dell'esistenza dei tuoi dati</p>
+                  <p className="text-gray-600 text-xs sm:text-sm">Ottenere conferma dell&apos;esistenza dei tuoi dati</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 bg-white p-3 sm:p-4 rounded-lg border border-gray-200">
@@ -231,7 +231,7 @@ export default function PrivacyPage() {
             <div className="bg-primary/10 border-l-4 border-primary p-4 sm:p-6 rounded-r-xl">
               <p className="text-gray-800 text-sm sm:text-base">
                 <strong>Come esercitare i tuoi diritti:</strong> Puoi esercitare i tuoi diritti inviando una richiesta
-                all'indirizzo email{' '}
+                all&apos;indirizzo email{' '}
                 <a href="mailto:privacy@partywoo.it" className="text-primary hover:underline font-semibold">
                   privacy@partywoo.it
                 </a>
@@ -253,7 +253,7 @@ export default function PrivacyPage() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">11. Modifiche alla Privacy Policy</h2>
             <p className="text-gray-700 leading-relaxed">
               Ci riserviamo il diritto di modificare o aggiornare questa Privacy Policy in qualsiasi momento.
-              Le modifiche saranno pubblicate su questa pagina con l'indicazione della data di ultimo aggiornamento.
+              Le modifiche saranno pubblicate su questa pagina con l&apos;indicazione della data di ultimo aggiornamento.
               Ti invitiamo a consultare periodicamente questa pagina per rimanere informato sulle nostre pratiche
               di protezione dei dati.
             </p>
@@ -262,7 +262,7 @@ export default function PrivacyPage() {
           <section className="mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">12. Reclami</h2>
             <p className="text-gray-700 mb-4 leading-relaxed">
-              Hai il diritto di proporre reclamo all'Autorità Garante per la protezione dei dati personali
+              Hai il diritto di proporre reclamo all&apos;Autorità Garante per la protezione dei dati personali
               se ritieni che il trattamento dei tuoi dati personali violi il GDPR.
             </p>
             <div className="bg-gray-50 p-4 sm:p-6 rounded-xl">
