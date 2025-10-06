@@ -8,6 +8,12 @@ client.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 async function addToSendGrid(email: string, firstName?: string) {
   try {
+    // Verifica che l'API key sia configurata
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('❌ SENDGRID_API_KEY non configurata');
+      return false;
+    }
+
     const data = {
       contacts: [
         {
@@ -92,11 +98,21 @@ export async function POST(request: Request) {
     // Aggiungi nuovo subscriber
     subscribers.push(subscriber);
 
-    // Salva localmente
-    await writeFile(filePath, JSON.stringify(subscribers, null, 2));
+    // Salva localmente (solo in sviluppo - in produzione il filesystem è read-only)
+    try {
+      await writeFile(filePath, JSON.stringify(subscribers, null, 2));
+      console.log('✅ Salvato localmente:', subscriber.email);
+    } catch (fsError) {
+      // In produzione il filesystem è read-only, ignora l'errore
+      console.log('⚠️ Filesystem read-only, skip salvataggio locale');
+    }
 
-    // Invia a SendGrid
-    await addToSendGrid(subscriber.email, subscriber.nome);
+    // Invia a SendGrid (principale metodo di salvataggio)
+    const sendgridSuccess = await addToSendGrid(subscriber.email, subscriber.nome);
+
+    if (!sendgridSuccess) {
+      throw new Error('Errore invio a SendGrid');
+    }
 
     // Log per debug
     console.log('✅ Nuova iscrizione newsletter:', subscriber);

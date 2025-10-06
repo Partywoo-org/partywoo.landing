@@ -17,6 +17,12 @@ interface BetaSignupData {
 
 async function addBetaToSendGrid(data: BetaSignupData) {
   try {
+    // Verifica che l'API key sia configurata
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('❌ SENDGRID_API_KEY non configurata');
+      return false;
+    }
+
     const contactData = {
       contacts: [
         {
@@ -85,11 +91,21 @@ export async function POST(request: Request) {
     // Aggiungi nuovo signup
     signups.push(signup);
 
-    // Salva localmente
-    await writeFile(filePath, JSON.stringify(signups, null, 2));
+    // Salva localmente (solo in sviluppo - in produzione il filesystem è read-only)
+    try {
+      await writeFile(filePath, JSON.stringify(signups, null, 2));
+      console.log('✅ Salvato localmente:', signup.email);
+    } catch (fsError) {
+      // In produzione il filesystem è read-only, ignora l'errore
+      console.log('⚠️ Filesystem read-only, skip salvataggio locale');
+    }
 
-    // Invia a SendGrid
-    await addBetaToSendGrid(body as BetaSignupData);
+    // Invia a SendGrid (principale metodo di salvataggio)
+    const sendgridSuccess = await addBetaToSendGrid(body as BetaSignupData);
+
+    if (!sendgridSuccess) {
+      throw new Error('Errore invio a SendGrid');
+    }
 
     // Log per debug
     console.log('✅ Nuova iscrizione beta:', signup);
