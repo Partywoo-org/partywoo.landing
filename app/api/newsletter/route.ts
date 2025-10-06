@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import sgMail from '@sendgrid/mail';
 
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 async function addToSendGrid(email: string, firstName?: string) {
   try {
