@@ -1,7 +1,4 @@
 import { NextResponse } from 'next/server';
-import { writeFile, readFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
 import client from '@sendgrid/client';
 
 client.setApiKey(process.env.SENDGRID_API_KEY || '');
@@ -67,47 +64,7 @@ export async function POST(request: Request) {
       id: Date.now().toString()
     };
 
-    // Path del file
-    const dataDir = path.join(process.cwd(), 'data');
-    const filePath = path.join(dataDir, 'newsletter-subscribers.json');
-
-    // Crea directory se non esiste
-    if (!existsSync(dataDir)) {
-      await mkdir(dataDir, { recursive: true });
-    }
-
-    // Leggi subscribers esistenti o crea array vuoto
-    let subscribers = [];
-    if (existsSync(filePath)) {
-      const fileContent = await readFile(filePath, 'utf-8');
-      subscribers = JSON.parse(fileContent);
-    }
-
-    // Controlla se email già esiste
-    const emailExists = subscribers.some(
-      (sub: { email: string }) => sub.email.toLowerCase() === body.email.toLowerCase()
-    );
-
-    if (emailExists) {
-      return NextResponse.json({
-        success: true,
-        message: 'Sei già iscritto alla newsletter!'
-      });
-    }
-
-    // Aggiungi nuovo subscriber
-    subscribers.push(subscriber);
-
-    // Salva localmente (solo in sviluppo - in produzione il filesystem è read-only)
-    try {
-      await writeFile(filePath, JSON.stringify(subscribers, null, 2));
-      console.log('✅ Salvato localmente:', subscriber.email);
-    } catch (fsError) {
-      // In produzione il filesystem è read-only, ignora l'errore
-      console.log('⚠️ Filesystem read-only, skip salvataggio locale');
-    }
-
-    // Invia a SendGrid (principale metodo di salvataggio)
+    // Invia a SendGrid
     const sendgridSuccess = await addToSendGrid(subscriber.email, subscriber.nome);
 
     if (!sendgridSuccess) {

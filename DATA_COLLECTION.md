@@ -2,7 +2,7 @@
 
 ## 🎯 Sistemi di Raccolta Dati
 
-⚡ **INTEGRAZIONE SENDGRID ATTIVA**: Tutti i contatti vengono automaticamente sincronizzati con SendGrid in tempo reale. Vedi `SENDGRID_SETUP.md` per dettagli.
+⚡ **INTEGRAZIONE SENDGRID ATTIVA**: Tutti i contatti vengono salvati esclusivamente su SendGrid in tempo reale. Vedi `SENDGRID_SETUP.md` per dettagli.
 
 Partywoo! raccoglie due tipi di dati:
 
@@ -20,7 +20,7 @@ Partywoo! raccoglie due tipi di dati:
 - Timestamp
 - ID univoco
 
-**File**: `landing/data/beta-signups.json`
+**Archiviazione**: SendGrid Marketing Contacts
 
 ### 2. **Newsletter Subscribers** (Utenti Interessati)
 **Endpoint**: `/api/newsletter`
@@ -32,155 +32,128 @@ Partywoo! raccoglie due tipi di dati:
 - Timestamp
 - ID univoco
 
-**File**: `landing/data/newsletter-subscribers.json`
+**Archiviazione**: SendGrid Marketing Contacts
 
 ## 📁 Dove Trovare i Dati
 
-I dati vengono salvati in file JSON nella cartella:
-```
-landing/data/
-├── beta-signups.json
-└── newsletter-subscribers.json
-```
+I dati vengono salvati **esclusivamente su SendGrid**:
+
+1. Vai su [SendGrid Dashboard](https://app.sendgrid.com)
+2. **Marketing** → **Contacts**
+3. Cerca per email o esporta la lista completa
 
 ## 🔍 Visualizzare i Dati
 
-### Opzione 1: Editor di Testo
-Apri i file JSON con qualsiasi editor di testo:
-```bash
-cd landing/data
-cat beta-signups.json
-cat newsletter-subscribers.json
-```
+### SendGrid Dashboard
 
-### Opzione 2: Formattato in Terminale
-```bash
-cat beta-signups.json | jq '.'
-```
+1. **Accedi a SendGrid**:
+   - Vai su [app.sendgrid.com](https://app.sendgrid.com)
+   - Fai login con le tue credenziali
 
-### Opzione 3: Script Node.js
-```javascript
-// read-signups.js
-const fs = require('fs');
+2. **Visualizza i contatti**:
+   - Sidebar → **Marketing** → **Contacts**
+   - Vedrai tutti i contatti raccolti
 
-const betaSignups = JSON.parse(
-  fs.readFileSync('./data/beta-signups.json', 'utf-8')
-);
-
-const newsletter = JSON.parse(
-  fs.readFileSync('./data/newsletter-subscribers.json', 'utf-8')
-);
-
-console.log('Beta Tester:', betaSignups.length);
-console.log('Newsletter:', newsletter.length);
-```
+3. **Cerca un contatto specifico**:
+   - Usa la barra di ricerca per cercare per email
+   - Filtra per lista se hai configurato liste separate
 
 ## 📤 Esportare i Dati
 
-### CSV Export (Excel)
-Puoi convertire JSON in CSV con questo script:
+### Da SendGrid Dashboard
 
-```javascript
-// export-csv.js
-const fs = require('fs');
-const { parse } = require('json2csv');
-
-const data = JSON.parse(fs.readFileSync('./data/beta-signups.json', 'utf-8'));
-const csv = parse(data);
-fs.writeFileSync('./beta-signups.csv', csv);
-console.log('✅ CSV esportato!');
-```
-
-Installazione dipendenza:
-```bash
-npm install json2csv
-node export-csv.js
-```
+1. Vai su **Marketing** → **Contacts**
+2. Seleziona i contatti che vuoi esportare (o seleziona tutti)
+3. Clicca su **Export** in alto a destra
+4. Scegli il formato:
+   - **CSV** (per Excel, Google Sheets)
+   - **JSON** (per elaborazione programmatica)
+5. Scarica il file esportato
 
 ## 🔐 Privacy e Sicurezza
-
-### File .gitignore
-I dati sono già esclusi da Git in `.gitignore`:
-```
-data/
-*.json
-```
 
 ### GDPR Compliance
 - ✅ Consenso implicito tramite form submission
 - ✅ Dati minimi raccolti
-- ✅ Possibilità di cancellazione manuale
-- ⚠️ TODO: Implementare funzione di cancellazione automatica
+- ✅ Dati salvati su SendGrid (certificato GDPR-compliant)
+- ✅ Possibilità di cancellazione contatti tramite SendGrid Dashboard
 
-## 🚀 Prossimi Passi (Produzione)
+### Gestione Cancellazione Dati
 
-Per un ambiente di produzione, considera:
+Per cancellare un contatto (diritto alla cancellazione GDPR):
 
-### 1. Database
-Sostituire file JSON con database:
-- **PostgreSQL** + Prisma
-- **MongoDB** + Mongoose
-- **Supabase** (consigliato per velocità)
+1. Vai su SendGrid Dashboard → Marketing → Contacts
+2. Cerca il contatto per email
+3. Clicca sui 3 puntini → **Delete Contact**
 
-### 2. Email Service
-Integrare servizio email per notifiche:
-- **Resend** (consigliato)
-- **SendGrid**
-- **Mailgun**
+## 🚀 Funzionalità Avanzate
 
-### 3. CRM Integration
-Inviare dati automaticamente a:
-- **HubSpot**
-- **Mailchimp**
-- **ActiveCampaign**
+### 1. Liste Separate (Consigliato)
 
-### 4. Analytics
-Tracciare conversioni con:
-- **Google Analytics**
-- **Plausible**
-- **PostHog**
+Crea liste dedicate in SendGrid per organizzare meglio i contatti:
+- Lista "Newsletter Subscribers"
+- Lista "Beta Testers"
 
-## 📝 Esempio Struttura Dati
+Vedi `SENDGRID_SETUP.md` per istruzioni dettagliate.
+
+### 2. Custom Fields
+
+Aggiungi custom fields in SendGrid per salvare:
+- Nome sala
+- Messaggio
+- Altri dati personalizzati
+
+Vedi `SENDGRID_SETUP.md` per la configurazione.
+
+### 3. Email Automation
+
+Configura email automatiche di benvenuto:
+- Dynamic Templates in SendGrid
+- Automazioni triggered da nuovi contatti
+
+### 4. Analytics e Monitoraggio
+
+- **SendGrid Activity**: Monitora le richieste API
+- **SendGrid Stats**: Vedi le statistiche dei contatti
+- Integrazione con Google Analytics per tracciare conversioni
+
+## 📝 Struttura Dati Inviati a SendGrid
 
 ### Beta Signup
-```json
+```typescript
 {
-  "id": "1696518400000",
-  "nome": "Mario",
-  "cognome": "Rossi",
-  "email": "mario@example.com",
-  "telefono": "+39 123 456 7890",
-  "nomeSala": "Villa Rosa",
-  "messaggio": "Vorrei testare la piattaforma",
-  "timestamp": "2024-10-05T12:00:00.000Z"
+  email: "mario@example.com",
+  first_name: "Mario",
+  last_name: "Rossi",
+  phone_number: "+39 123 456 7890",
+  // custom_fields (se configurati):
+  // - nomeSala: "Villa Rosa"
+  // - messaggio: "Vorrei testare la piattaforma"
 }
 ```
 
 ### Newsletter Subscriber
-```json
+```typescript
 {
-  "id": "1696518400000",
-  "email": "utente@example.com",
-  "nome": "Luigi",
-  "timestamp": "2024-10-05T12:00:00.000Z"
+  email: "luigi@example.com",
+  first_name: "Luigi",
+  // Timestamp gestito automaticamente da SendGrid
 }
 ```
 
 ## 🛠️ Troubleshooting
 
-### File non trovato
-Se i file non esistono, verranno creati automaticamente alla prima submission.
+### Contatti non arrivano a SendGrid
+1. Verifica che `SENDGRID_API_KEY` sia configurata in produzione
+2. Controlla i logs del server per errori
+3. Verifica che l'API key abbia i permessi "Marketing"
 
-### Permessi di scrittura
-Assicurati che Next.js abbia i permessi per scrivere nella cartella `data/`:
-```bash
-chmod 755 data/
-```
+### Email duplicate
+SendGrid gestisce automaticamente i duplicati - i contatti esistenti vengono aggiornati invece che duplicati.
 
-### Dati duplicati
-L'API newsletter controlla automaticamente email duplicate.
-Per beta signups, attualmente non c'è controllo duplicati (feature intenzionale per permettere modifiche).
+### Errori 500 in produzione
+Vedi `PRODUCTION_SETUP.md` per la configurazione completa delle variabili d'ambiente.
 
 ---
 
-**Nota**: Questo è un sistema di base per raccolta dati. Per produzione, migra a un database e servizio email professionale.
+**Nota**: Tutti i dati sono gestiti esclusivamente tramite SendGrid, una piattaforma certificata GDPR-compliant e sicura.

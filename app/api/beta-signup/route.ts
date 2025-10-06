@@ -1,7 +1,4 @@
 import { NextResponse } from 'next/server';
-import { writeFile, readFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
 import client from '@sendgrid/client';
 
 client.setApiKey(process.env.SENDGRID_API_KEY || '');
@@ -72,35 +69,7 @@ export async function POST(request: Request) {
       id: Date.now().toString()
     };
 
-    // Path del file
-    const dataDir = path.join(process.cwd(), 'data');
-    const filePath = path.join(dataDir, 'beta-signups.json');
-
-    // Crea directory se non esiste
-    if (!existsSync(dataDir)) {
-      await mkdir(dataDir, { recursive: true });
-    }
-
-    // Leggi signups esistenti o crea array vuoto
-    let signups = [];
-    if (existsSync(filePath)) {
-      const fileContent = await readFile(filePath, 'utf-8');
-      signups = JSON.parse(fileContent);
-    }
-
-    // Aggiungi nuovo signup
-    signups.push(signup);
-
-    // Salva localmente (solo in sviluppo - in produzione il filesystem è read-only)
-    try {
-      await writeFile(filePath, JSON.stringify(signups, null, 2));
-      console.log('✅ Salvato localmente:', signup.email);
-    } catch (fsError) {
-      // In produzione il filesystem è read-only, ignora l'errore
-      console.log('⚠️ Filesystem read-only, skip salvataggio locale');
-    }
-
-    // Invia a SendGrid (principale metodo di salvataggio)
+    // Invia a SendGrid
     const sendgridSuccess = await addBetaToSendGrid(body as BetaSignupData);
 
     if (!sendgridSuccess) {
