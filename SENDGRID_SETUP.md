@@ -105,6 +105,9 @@ Se vuoi inviare automaticamente email di benvenuto, puoi:
 
 2. **Aggiornare gli endpoint API** per inviare email:
 ```typescript
+import sgMail from '@sendgrid/mail';
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+
 await sgMail.send({
   to: email,
   from: 'noreply@partywoo.it', // Verifica questo indirizzo in SendGrid

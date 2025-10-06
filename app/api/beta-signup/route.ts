@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import sgMail from '@sendgrid/mail';
+import client from '@sendgrid/client';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+client.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 interface BetaSignupData {
   nome: string;
@@ -38,7 +38,7 @@ async function addBetaToSendGrid(data: BetaSignupData) {
       body: contactData
     };
 
-    await sgMail.request(request);
+    await client.request(request);
     console.log('✅ Beta tester aggiunto a SendGrid:', data.email);
     return true;
   } catch (error) {

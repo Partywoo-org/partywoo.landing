@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import sgMail from '@sendgrid/mail';
+import client from '@sendgrid/client';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+client.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 async function addToSendGrid(email: string, firstName?: string) {
   try {
@@ -13,9 +13,6 @@ async function addToSendGrid(email: string, firstName?: string) {
         {
           email: email,
           first_name: firstName || '',
-          custom_fields: {
-            // Aggiungi custom fields se necessario
-          }
         }
       ]
     };
@@ -26,7 +23,7 @@ async function addToSendGrid(email: string, firstName?: string) {
       body: data
     };
 
-    await sgMail.request(request);
+    await client.request(request);
     console.log('✅ Contatto aggiunto a SendGrid:', email);
     return true;
   } catch (error) {
