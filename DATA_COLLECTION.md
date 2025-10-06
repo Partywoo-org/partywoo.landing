@@ -2,6 +2,8 @@
 
 ## 🎯 Sistemi di Raccolta Dati
 
+⚡ **INTEGRAZIONE SENDGRID ATTIVA**: Tutti i contatti vengono automaticamente sincronizzati con SendGrid in tempo reale. Vedi `SENDGRID_SETUP.md` per dettagli.
+
 Partywoo! raccoglie due tipi di dati:
 
 ### 1. **Beta Tester Signups** (Gestori Sale)

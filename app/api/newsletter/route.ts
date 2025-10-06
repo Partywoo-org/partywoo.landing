@@ -3,6 +3,38 @@ import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+async function addToSendGrid(email: string, firstName?: string) {
+  try {
+    const data = {
+      contacts: [
+        {
+          email: email,
+          first_name: firstName || '',
+          custom_fields: {
+            // Aggiungi custom fields se necessario
+          }
+        }
+      ]
+    };
+
+    const request = {
+      url: `/v3/marketing/contacts`,
+      method: 'PUT' as const,
+      body: data
+    };
+
+    await sgMail.request(request);
+    console.log('✅ Contatto aggiunto a SendGrid:', email);
+    return true;
+  } catch (error) {
+    console.error('❌ Errore SendGrid:', error);
+    return false;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -63,8 +95,11 @@ export async function POST(request: Request) {
     // Aggiungi nuovo subscriber
     subscribers.push(subscriber);
 
-    // Salva
+    // Salva localmente
     await writeFile(filePath, JSON.stringify(subscribers, null, 2));
+
+    // Invia a SendGrid
+    await addToSendGrid(subscriber.email, subscriber.nome);
 
     // Log per debug
     console.log('✅ Nuova iscrizione newsletter:', subscriber);

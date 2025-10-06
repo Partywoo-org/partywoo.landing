@@ -3,6 +3,50 @@ import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+interface BetaSignupData {
+  nome: string;
+  cognome: string;
+  email: string;
+  telefono?: string;
+  nomeSala: string;
+  messaggio?: string;
+}
+
+async function addBetaToSendGrid(data: BetaSignupData) {
+  try {
+    const contactData = {
+      contacts: [
+        {
+          email: data.email,
+          first_name: data.nome,
+          last_name: data.cognome,
+          phone_number: data.telefono || '',
+          custom_fields: {
+            // Puoi aggiungere custom fields qui se li crei in SendGrid
+            // e1_T: data.nomeSala, // esempio: campo custom per nome sala
+          }
+        }
+      ]
+    };
+
+    const request = {
+      url: `/v3/marketing/contacts`,
+      method: 'PUT' as const,
+      body: contactData
+    };
+
+    await sgMail.request(request);
+    console.log('✅ Beta tester aggiunto a SendGrid:', data.email);
+    return true;
+  } catch (error) {
+    console.error('❌ Errore SendGrid beta signup:', error);
+    return false;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -41,8 +85,11 @@ export async function POST(request: Request) {
     // Aggiungi nuovo signup
     signups.push(signup);
 
-    // Salva
+    // Salva localmente
     await writeFile(filePath, JSON.stringify(signups, null, 2));
+
+    // Invia a SendGrid
+    await addBetaToSendGrid(body as BetaSignupData);
 
     // Log per debug
     console.log('✅ Nuova iscrizione beta:', signup);
